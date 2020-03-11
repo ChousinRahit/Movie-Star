@@ -1,26 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header';
+import Movies from './components/Movies';
+import MovieInfo from './components/MovieInfo';
+import Footer from './components/Footer';
+import SearchedResults from './components/SearchResults';
+import ScrollMemory from 'react-router-scroll-memory';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <ScrollMemory />
+        <Header />
+        <Switch>
+          <Route path="/" exact component={Movies} />
+          <Route path="/search" exact component={SearchedResults} />
+          <Route path="/:movieId" exact component={MovieInfo} />
+        </Switch>
+        <Footer />
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;

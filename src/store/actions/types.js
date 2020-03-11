@@ -1,0 +1,11 @@
+export const GETMOVIES = 'GETMOVIES';
+export const LOADMORE = 'LOADMORE';
+export const LOADING = 'LOADING';
+export const GETMOVIE = 'GRTMOVIE';
+export const GETCREDITS = 'GETCREDITS';
+export const SIMILAR_MOVIES = 'SIMILAR_MOVIES';
+export const GETMOVIES_WITH_QUERY = 'GETMOVIES_WITH_QUERY';
+export const GETMOVIE_WITH_GENRE = 'GETMOVIE_WITH_GENRE';
+export const PAGELOADING = 'PAGELOADING';
+export const NULL_MOVIES = 'NULL_MOVIES';
+export const LAST_PAGE_REACHED = 'LAST_PAGE_REACHED';
