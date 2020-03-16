@@ -3,10 +3,12 @@ import { Redirect, Link, useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faFilm } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
+import { MobileView } from 'react-device-detect';
 //-------------------------------
 
 // import logo from '../../img/logo1.png';
 import { getMoviesWithSearchKeywords, getMovies } from '../../store/actions';
+import { genres } from '../../utils/genres';
 
 //-------------------------------
 
@@ -51,103 +53,86 @@ const Header = () => {
       setIsYearFieldInvalid(true);
     }
     e.preventDefault();
-    if (queryYear >= 1881) history.push(`/search?year=${queryYear}`);
+    if (queryYear >= 1881) {
+      history.push(`/search?year=${queryYear}`);
+      setIsDrawerOpen(false);
+    }
   };
+
+  const GenresList = () => {
+    return genres.map(gen => (
+      <li
+        onClick={() => {
+          setIsDrawerOpen(false);
+          setIsCategoriesShowing(false);
+        }}
+      >
+        <Link to={`/search?genre=${gen.name.toLowerCase()}`}>{gen.name}</Link>
+      </li>
+    ));
+  };
+
+  const LanguageListObj = {
+    en: 'English',
+    hi: 'Hindi',
+    kn: 'Kannada',
+    te: 'Telugu',
+    cn: 'Chinese',
+    ko: 'Korean'
+  };
+  const LanguageList = () => {
+    return Object.keys(LanguageListObj).map(langCode => (
+      <li
+        onClick={() => {
+          setIsDrawerOpen(false);
+          setIsCategoriesShowing(false);
+        }}
+      >
+        <Link to={`/search?lang=${langCode}`}>{LanguageListObj[langCode]}</Link>
+      </li>
+    ));
+  };
+
+  const linksClassNameDependingOnScreenSize = isDrawerOpen
+    ? ['header__nav-list-item', 'drawer-header__nav-list-item'].join(' ')
+    : 'header__nav-list-item';
+
+  const categoriesListClassName = isCategoriesShowing
+    ? 'header__nav-list-item_categories_list'
+    : ['header__nav-list-item_categories_list', 'displayNone'].join(' ');
 
   const Links = (
     <Fragment>
-      <li className="header__nav-list-item" onClick={() => history.push('/')}>
-        <a href="/">Popular</a>
+      <li
+        className={linksClassNameDependingOnScreenSize}
+        onClick={() => {
+          history.push('/');
+          setIsDrawerOpen(false);
+        }}
+      >
+        <Link to="/">Popular</Link>
       </li>
       <li
-        className="header__nav-list-item"
+        className={linksClassNameDependingOnScreenSize}
         onMouseOver={() => setIsCategoriesShowing(true)}
         onMouseLeave={() => setIsCategoriesShowing(false)}
       >
-        <a className="header__nav-list-item_categories">Categories</a>
+        <Link className="header__nav-list-item_categories">Categories</Link>
         <div
           onMouseOver={() => setIsCategoriesShowing(true)}
-          className={
-            isCategoriesShowing
-              ? 'header__nav-list-item_categories_list'
-              : ['header__nav-list-item_categories_list', 'displayNone'].join(
-                  ' '
-                )
-          }
+          className={categoriesListClassName}
         >
           <ul className="header__nav-list-item_categories_sublist">
             <h3>Genre</h3>
-            <li>
-              <Link to="/search?genre=action">Action</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=adventure">Adventure</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=animation">Animation</Link>
-            </li>
-
-            <li>
-              <Link to="/search?genre=comedy">Comedy</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=crime">Crime</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=documentary">Documentary</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=drama">Drama</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=family">Family</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=fantasy">Fantasy</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=history">History</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=horror">Horror</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=sci-fri">Sci-Fri</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=thriller">Thriller</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=war">War</Link>
-            </li>
-            <li>
-              <Link to="/search?genre=western">Western</Link>
-            </li>
+            <GenresList />
           </ul>
           <ul className="header__nav-list-item_categories_sublist-2">
             <h3>Popular Languages</h3>
-            <li>
-              <Link to="/search?lang=en">English</Link>
-            </li>
-            <li>
-              <Link to="/search?lang=hi">Hindi</Link>
-            </li>
-            <li>
-              <Link to="/search?lang=kn">Kannada</Link>
-            </li>
-            <li>
-              <Link to="/search?lang=te">Telugu</Link>
-            </li>
-            <li>
-              <Link to="/search?lang=cn">Chinese</Link>
-            </li>
-            <li>
-              <Link to="/search?lang=ko">Korean</Link>
-            </li>
+            <LanguageList />
           </ul>
           <div>
             <h3>Year</h3>
-            <form>
+            <form className="year__input__form">
               <input
                 className="yearInput"
                 maxLength="4"
@@ -157,7 +142,6 @@ const Header = () => {
                   setQueryYear(e.target.value.match(/^\d+$/) && e.target.value)
                 }
               />
-
               <button
                 onClick={e => onYearSubmitClick(e)}
                 className="btn btn-yearInput"
@@ -168,25 +152,12 @@ const Header = () => {
           </div>
         </div>
       </li>
-
-      <li className="header__nav-list-item">
-        <a href="#footer">About</a>
+      <li className={linksClassNameDependingOnScreenSize}>
+        <Link href="#footer">About</Link>
       </li>
     </Fragment>
   );
 
-  // const onChangeSearchInput = e => {
-  //   e.preventDefault();
-  //   const value = e.target.value;
-  //   setSearchKey(value);
-  //   if (!value) {
-  //     dispatch(getMovies());
-  //   }
-  //   dispatch(getMoviesWithSearchKeywords(value));
-  // };
-  const onMenuIconClick = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
   const onSubmitSearch = e => {
     e.preventDefault();
     e.target.children[0].blur();
@@ -195,6 +166,7 @@ const Header = () => {
       history.push(`/search?q=${searchKey}`);
     }
   };
+
   return (
     <header>
       <section className="header">
@@ -222,11 +194,14 @@ const Header = () => {
         <input
           type="checkbox"
           checked={isDrawerOpen}
-          onChange={e => setIsDrawerOpen(!isDrawerOpen)}
+          onChange={() => setIsDrawerOpen(!isDrawerOpen)}
           id="menurad"
           className="header__menu-radio"
         />
-        <div className="header__menu-icon" onClick={onMenuIconClick}>
+        <div
+          className="header__menu-icon"
+          onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+        >
           <label>
             <span></span>
             <span></span>

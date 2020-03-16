@@ -60,10 +60,6 @@ export const genres = [
     name: 'Sci-Fri'
   },
   {
-    id: 10770,
-    name: 'TV Movie'
-  },
-  {
     id: 53,
     name: 'Thriller'
   },

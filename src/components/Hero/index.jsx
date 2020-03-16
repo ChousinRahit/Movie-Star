@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { IMAGE_BASE_URL, BACKDROP_SIZE } from '../../config';
+import { MobileView, BrowserView } from 'react-device-detect';
+import truncate from '../../utils/textTruncate';
 
 const HeroComponent = ({ heroMovie, genres, tagline }) => {
   const bgcStyle = {
@@ -27,7 +29,13 @@ const HeroComponent = ({ heroMovie, genres, tagline }) => {
           {heroMovie?.title}
           <span className="tagline">{tagline || ''}</span>
         </h2>
-        <p>{heroMovie?.overview}</p>
+        <BrowserView>
+          <p>{heroMovie?.overview}</p>
+        </BrowserView>
+        <MobileView>
+          <p>{truncate(400, heroMovie?.overview)}</p>
+        </MobileView>
+
         <div className="hero__genres">
           {genres?.map(genere => (
             <p>{genere}</p>

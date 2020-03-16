@@ -92,6 +92,7 @@
         cursor: pointer;
         @include respond(tab-port) {
           letter-spacing: 0.25rem;
+          font-size: 2rem;
         }
       }
       &_desc {

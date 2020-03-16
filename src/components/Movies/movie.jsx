@@ -10,15 +10,11 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import { Link } from 'react-router-dom';
 import { MobileView, BrowserView } from 'react-device-detect';
 import NoImage from '../../img/no_image.jpg';
+import truncate from '../../utils/textTruncate';
 
 import { useDispatch } from 'react-redux';
 const Movie = ({ movie }) => {
   const dispatch = useDispatch();
-  const truncate = (limit, textToTruncate) => {
-    return textToTruncate?.length > limit
-      ? textToTruncate.substr(0, limit) + ' . . .'
-      : textToTruncate;
-  };
 
   return (
     <div className="movies__movie">
