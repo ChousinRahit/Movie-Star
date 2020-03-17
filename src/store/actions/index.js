@@ -4,7 +4,8 @@ import {
   loadMore,
   getMovies,
   getMoviesWithSearchKeywords,
-  getMoviesWithGenre
+  getTheNextPage,
+  setPageToInitial
 } from './movieActions';
 import { getSimilarMovies } from './similarMovieAction';
 export {
@@ -14,5 +15,6 @@ export {
   getMovies,
   getSimilarMovies,
   getMoviesWithSearchKeywords,
-  getMoviesWithGenre
+  getTheNextPage,
+  setPageToInitial
 };

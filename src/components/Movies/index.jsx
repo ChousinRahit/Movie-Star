@@ -18,7 +18,6 @@ const Movies = () => {
     history.push('/noResy');
   }
 
-  console.log(window.screen.width);
   const dispatch = useDispatch();
 
   useEffect(() => {

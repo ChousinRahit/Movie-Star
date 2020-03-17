@@ -8,19 +8,18 @@ import Movie from '../Movies/movie';
 import Loading from '../Loading';
 import { getGenreId } from '../../utils/genres';
 import {
-  getMoviesWithGenre,
-  getMoviesWithSearchKeywords
+  getMoviesWithSearchKeywords,
+  getTheNextPage,
+  setPageToInitial
 } from '../../store/actions';
 
 const SearchedResults = () => {
   // Selecting state from redux store
-  const {
-    quriedMovies,
-    loading,
-    pageLoading,
-    lastPageReached,
-    errors
-  } = useSelector(state => state.movies);
+  const { loading, pageLoading, lastPageReached, errors, page } = useSelector(
+    state => state.movies
+  );
+
+  const { quriedMovies } = useSelector(state => state.movies);
 
   const { nullMovies } = errors;
 
@@ -29,16 +28,9 @@ const SearchedResults = () => {
   // instance of react-redux dispatch hook
   const dispatch = useDispatch();
 
-  // component state to hold the page data and some flags
-  const [page, setPage] = useState({
-    withQuery: 1,
-    withGenre: 1,
-    withLang: 1,
-    withYear: 1
-  });
-
   const [queryMode, setQueryMode] = useState('');
   const [queryItem, setQueryItem] = useState('');
+  const [first, setFirst] = useState(true);
 
   // router hook to know the current location
   const location = useLocation();
@@ -49,15 +41,15 @@ const SearchedResults = () => {
   const prevQueryItemRef = useRef();
   useEffect(() => {
     setQueryMode(queryObj[0].substr(1));
-    console.log('-----------setting queryMode');
+    // console.log('-----------setting queryMode');
     prevQueryItemRef.current = queryItem;
     setQueryItem(queryObj[1]);
-    console.log('-----------setting queryItem');
-  });
+    // console.log('-----------setting queryItem');
+  }, [queryObj]);
 
   const prevQuery = prevQueryItemRef.current;
 
-  console.log('prevQuery', prevQuery);
+  // console.log('prevQuery', prevQuery);
 
   // just for fun - if query is empty, showing results for 'empty' ☺
   if (queryObj[0] === '?q' && !queryObj[1]) {
@@ -67,10 +59,6 @@ const SearchedResults = () => {
   const prevQueryTerm = usePrevious(queryItem);
 
   useEffect(() => {
-    // if (prevQueryTerm !== queryItem) {
-    //   setPage({ withQuery: 1, withGenre: 1, withLang: 1, withYear: 1 });
-    //   console.log('-----------setting Page');
-    // }
     let reqParams = {
       keyword: null,
       genre: null,
@@ -80,14 +68,9 @@ const SearchedResults = () => {
 
     switch (queryMode) {
       case 'q':
-        // setIsWithQuery(true);
         reqParams.keyword = queryItem;
-        // dispatch(getMoviesWithSearchKeywords(queryItem, page.withQuery));
         break;
       case 'genre':
-        // setIsWithQuery(false);
-        // dispatch(getMoviesWithGenre(getGenreId(queryItem), page.withGenre));
-        // console.log(queryItem);
         reqParams.genre = getGenreId(queryItem);
         break;
 
@@ -103,18 +86,20 @@ const SearchedResults = () => {
     }
 
     // option to
-    let option = 0; // 0 - for new Search keyword , 1 - for load more
-    if (prevQuery === queryObj[1]) {
-      option = 1;
+    // let option = 0; // 0 - for new Search keyword , 1 - for load more
+    // if (prevQuery === queryObj[1]) {
+    //   option = 1;
+    // }
+
+    console.log(prevQuery !== queryObj[1] && !first);
+    if (prevQuery !== queryObj[1] && !first) {
+      dispatch(setPageToInitial);
+
+      return;
     }
-
-    dispatch(getMoviesWithSearchKeywords(reqParams, page, option));
+    dispatch(getMoviesWithSearchKeywords(reqParams, queryItem));
+    console.log(reqParams, queryItem);
   }, [queryItem, page]);
-
-  // useEffect(() => {
-  //   console.log('{{{{{{{{{{{{{{{{{{{COMP DID MOUNT')
-  //   setPage({ withQuery: 1, withGenre: 1, withLang: 1, withYear: 1 });
-  // }, [queryItem]);
 
   const ShowingResultsHeading = (
     <h1 className="search__results-heading">
@@ -131,58 +116,12 @@ const SearchedResults = () => {
   // Load more button logic
   const onClickLoadMore = e => {
     e.preventDefault();
-    let pageObj = {};
 
-    switch (queryMode) {
-      case 'q':
-        pageObj = {
-          withQuery: page.withQuery + 1,
-          withGenre: 1,
-          withLang: 1,
-          withYear: 1
-        };
-        break;
-      case 'genre':
-        pageObj = {
-          withQuery: 1,
-          withGenre: page.withGenre + 1,
-          withLang: 1,
-          withYear: 1
-        };
-        break;
-      case 'lang':
-        pageObj = {
-          withQuery: 1,
-          withGenre: 1,
-          withLang: page.withLang + 1,
-          withYear: 1
-        };
-        break;
-      case 'year':
-        pageObj = {
-          withQuery: 1,
-          withGenre: 1,
-          withLang: 1,
-          withYear: page.withYear + 1
-        };
-        break;
-      default:
-        break;
-    }
-
-    setPage(pageObj);
-    console.log('-----------setting Page');
+    // ------------------------------------ ACTION TO INCREASE PAGE NUMBER
+    dispatch(getTheNextPage(queryMode));
   };
 
-  // console.log(page);
-  // console.log(
-  // 'PAGE OBJJJJJJJJJJJnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
-  // page
-  // );
-
-  console.log('[PAGE]', page);
-  console.log('[queryItem]', queryItem);
-  console.log('[queryItem]', queryItem);
+  // console.log('[queryItem]', queryItem);
 
   const loadingDiv = (
     <div className="loadingDiv">

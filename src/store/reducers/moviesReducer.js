@@ -8,17 +8,21 @@ import {
   GETMOVIE_WITH_GENRE,
   PAGELOADING,
   NULL_MOVIES,
-  LAST_PAGE_REACHED
+  LAST_PAGE_REACHED,
+  LOAD_MORE_PAGE_CHANGE,
+  SET_QUERY_ITEM,
+  SET_PAGE_TO_INITIAL
 } from '../actions/types';
 
 const initialState = {
   movies: [],
-  page: { popular: 1 },
+  page: { popular: 1, q: 1, genre: 1, lang: 1, year: 1 },
   loading: true,
   pageLoading: true,
   movie: {},
   credits: [],
   quriedMovies: [],
+  queryItem: '',
   errors: { nullMovies: false, netWorkError: false },
   lastPageReached: false
 };
@@ -117,7 +121,31 @@ export default function moviesReducer(state = initialState, action) {
         lastPageReached: true
       };
       return newState;
-
+    case SET_QUERY_ITEM:
+      newState = {
+        ...state,
+        queryItem: payload
+      };
+      return newState;
+    case SET_PAGE_TO_INITIAL:
+      newState = {
+        ...state,
+        page: { popular: state.page.popular, q: 1, genre: 1, lang: 1, year: 1 }
+      };
+      return newState;
+    case LOAD_MORE_PAGE_CHANGE:
+      console.log(
+        '====================================================================================================================================================================='
+      );
+      newState = {
+        ...state,
+        page: {
+          ...state.page,
+          popular: state.page.popular,
+          [payload]: state.page[payload] + 1
+        }
+      };
+      return newState;
     default:
       return state;
   }

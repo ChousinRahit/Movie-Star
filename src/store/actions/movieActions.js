@@ -9,7 +9,10 @@ import {
   GETMOVIE_WITH_GENRE,
   PAGELOADING,
   NULL_MOVIES,
-  LAST_PAGE_REACHED
+  LAST_PAGE_REACHED,
+  LOAD_MORE_PAGE_CHANGE,
+  SET_QUERY_ITEM,
+  SET_PAGE_TO_INITIAL
 } from './types';
 import { API_KEY, API_URL } from '../../config';
 import fetchItems from '../../utils/fetchItems';
@@ -45,6 +48,12 @@ export const getMovies = searchKeyword => async dispatch => {
   }
 };
 
+export const setPageToInitial = () => async dispatch => {
+  dispatch({
+    type: SET_PAGE_TO_INITIAL
+  });
+};
+
 export const loadMore = () => async (dispatch, getState) => {
   dispatch({
     type: LOADING
@@ -57,6 +66,13 @@ export const loadMore = () => async (dispatch, getState) => {
   dispatch({
     type: LOADMORE,
     payload: [movies, page]
+  });
+};
+
+export const getTheNextPage = withThisQuery => async dispatch => {
+  dispatch({
+    type: LOAD_MORE_PAGE_CHANGE,
+    payload: withThisQuery
   });
 };
 
@@ -88,19 +104,38 @@ export const getCredits = movieId => async dispatch => {
 };
 
 // Handling both search with new Search keyword and/or Load more for same keyword
-export const getMoviesWithSearchKeywords = (reqParams, page, option) => async (
-  dispatch,
-  getState
-) => {
-  page === 1
-    ? dispatch({
-        type: PAGELOADING
-      })
-    : dispatch({
-        type: LOADING
-      });
+export const getMoviesWithSearchKeywords = (
+  reqParams,
+  queryItem,
+  option
+) => async (dispatch, getState) => {
+  const prevQueryItem = getState().movies.queryItem;
 
-  console.log(reqParams);
+  dispatch({
+    type: SET_QUERY_ITEM,
+    payload: queryItem
+  });
+
+  // dispatch({
+  //   type: SET_QUERY_MODE_TO_INITIAL
+  // });
+
+  // page === 1
+  //   ? dispatch({
+  //       type: PAGELOADING
+  //     })
+  //   : dispatch({
+  //       type: LOADING
+  //     });
+
+  // console.log(reqParams);
+
+  const page = getState().movies.page;
+
+  // console.log(
+  //   'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp',
+  //   page
+  // );
 
   let endpoint = `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US`;
   let type = '';
@@ -109,19 +144,19 @@ export const getMoviesWithSearchKeywords = (reqParams, page, option) => async (
     if (value) {
       switch (key) {
         case 'keyword':
-          endpoint = `${API_URL}search/movie?api_key=${API_KEY}&language=en-US&query=${value}&page=${page.withQuery}`;
+          endpoint = `${API_URL}search/movie?api_key=${API_KEY}&language=en-US&query=${value}&page=${page.q}`;
           type = GETMOVIES_WITH_QUERY;
           break;
         case 'genre':
-          endpoint = `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&with_genres=${value}&page=${page.withGenre}`;
+          endpoint = `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&with_genres=${value}&page=${page.genre}`;
           type = GETMOVIE_WITH_GENRE;
           break;
         case 'lang':
-          endpoint = `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&with_original_language=${value}&page=${page.withLang}`;
+          endpoint = `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&with_original_language=${value}&page=${page.lang}`;
           type = GETMOVIES_WITH_QUERY;
           break;
         case 'year':
-          endpoint = `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&primary_release_year=${value}&page=${page.withYear}`;
+          endpoint = `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&primary_release_year=${value}&page=${page.year}`;
           type = GETMOVIES_WITH_QUERY;
           break;
         default:
@@ -154,6 +189,12 @@ export const getMoviesWithSearchKeywords = (reqParams, page, option) => async (
   // Sorting movies on the vote_average
   movies.sort((a, b) => b.vote_average - a.vote_average);
 
+  let option = 0; // 0 - for new Search keyword , 1 - for load more
+  console.log('--------------', prevQueryItem, queryItem);
+  if (prevQueryItem === queryItem) {
+    option = 1;
+  }
+
   dispatch({
     type,
     payload: [movies, page],
@@ -168,48 +209,75 @@ export const getMoviesWithSearchKeywords = (reqParams, page, option) => async (
       });
     }
   }
+
+  // if (prevQueryItem !== queryItem) {
+  //   dispatch({
+  //     type: SET_PAGE_TO_INITIAL
+  //   });
+  // }
 };
 
-export const getMoviesWithGenre = (genreId, page) => async (
-  dispatch,
-  getState
-) => {
-  page === 1
-    ? dispatch({
-        type: PAGELOADING
-      })
-    : dispatch({
-        type: LOADING
-      });
-
-  const endpoint = `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=${page}&with_genres=${genreId}`;
-  const res = await axios.get(endpoint);
-  const totalPages = res.data.total_pages;
-  let movies = res.data.results;
-
-  // Using page state to know what is the request for (new Genre click or Laod more)
-  const prevPage = getState().movies.page.withGenre;
-
-  // option to
-  let option = 0; // 0 - for new Genre click , 1 - for load more
-  if (prevPage !== page) {
-    option = 1;
-  }
-  // Sorting movies on the vote_average
-  movies.sort((a, b) => b.vote_average - a.vote_average);
-
+export const getNextPageMovies = with_this => async dispatch => {
   dispatch({
-    type: GETMOVIE_WITH_GENRE,
-    payload: [movies, page],
-    option
+    type: LOAD_MORE_PAGE_CHANGE,
+    payload: with_this
   });
-
-  if (totalPages <= page) {
-    dispatch({
-      type: LAST_PAGE_REACHED
-    });
-  }
 };
+
+// export const loadMore = () => async (dispatch, getState) => {
+//   dispatch({
+//     type: LOADING
+//   });
+
+//   const prevPage = getState().movies.page.popular;
+//   const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=${prevPage +
+//     1}`;
+//   const { movies, page } = await fetchItems(endpoint);
+//   dispatch({
+//     type: LOADMORE,
+//     payload: [movies, page]
+//   });
+// };
+// export const getMoviesWithGenre = (genreId, page) => async (
+//   dispatch,
+//   getState
+// ) => {
+//   page === 1
+//     ? dispatch({
+//         type: PAGELOADING
+//       })
+//     : dispatch({
+//         type: LOADING
+//       });
+
+//   const endpoint = `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&page=${page}&with_genres=${genreId}`;
+//   const res = await axios.get(endpoint);
+//   const totalPages = res.data.total_pages;
+//   let movies = res.data.results;
+
+//   // Using page state to know what is the request for (new Genre click or Laod more)
+//   const prevPage = getState().movies.page.withGenre;
+
+//   // option to
+//   let option = 0; // 0 - for new Genre click , 1 - for load more
+//   if (prevPage !== page) {
+//     option = 1;
+//   }
+//   // Sorting movies on the vote_average
+//   movies.sort((a, b) => b.vote_average - a.vote_average);
+
+//   dispatch({
+//     type: GETMOVIE_WITH_GENRE,
+//     payload: [movies, page],
+//     option
+//   });
+
+//   if (totalPages <= page) {
+//     dispatch({
+//       type: LAST_PAGE_REACHED
+//     });
+//   }
+// };
 
 // https://api.themoviedb.org/3/search/movie?api_key=a6ee910303db76c7dfd31dcee2af9349&language=en-US&primary_release_year=2019
 // https://api.themoviedb.org/3/discover/movie?api_key=a6ee910303db76c7dfd31dcee2af9349&language=en-US&primary_release_year=2018
