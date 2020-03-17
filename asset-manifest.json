@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/movie-star/static/css/main.29014b64.chunk.css",
-    "main.js": "/movie-star/static/js/main.ec1fc916.chunk.js",
-    "main.js.map": "/movie-star/static/js/main.ec1fc916.chunk.js.map",
-    "runtime-main.js": "/movie-star/static/js/runtime-main.0c151705.js",
-    "runtime-main.js.map": "/movie-star/static/js/runtime-main.0c151705.js.map",
-    "static/css/2.27fdde94.chunk.css": "/movie-star/static/css/2.27fdde94.chunk.css",
-    "static/js/2.a8f42ca2.chunk.js": "/movie-star/static/js/2.a8f42ca2.chunk.js",
-    "static/js/2.a8f42ca2.chunk.js.map": "/movie-star/static/js/2.a8f42ca2.chunk.js.map",
-    "index.html": "/movie-star/index.html",
-    "precache-manifest.ea1a31bcf571af5e722b2cdbb5b5ee09.js": "/movie-star/precache-manifest.ea1a31bcf571af5e722b2cdbb5b5ee09.js",
-    "service-worker.js": "/movie-star/service-worker.js",
-    "static/css/2.27fdde94.chunk.css.map": "/movie-star/static/css/2.27fdde94.chunk.css.map",
-    "static/css/main.29014b64.chunk.css.map": "/movie-star/static/css/main.29014b64.chunk.css.map",
-    "static/js/2.a8f42ca2.chunk.js.LICENSE": "/movie-star/static/js/2.a8f42ca2.chunk.js.LICENSE",
-    "static/media/no_image.jpg": "/movie-star/static/media/no_image.f663ef00.jpg",
-    "static/media/index.scss": "/movie-star/static/media/themovieorg.02a9430b.svg"
+    "main.css": "/Movie-Star/static/css/main.af749b73.chunk.css",
+    "main.js": "/Movie-Star/static/js/main.ec1fc916.chunk.js",
+    "main.js.map": "/Movie-Star/static/js/main.ec1fc916.chunk.js.map",
+    "runtime-main.js": "/Movie-Star/static/js/runtime-main.34348655.js",
+    "runtime-main.js.map": "/Movie-Star/static/js/runtime-main.34348655.js.map",
+    "static/css/2.27fdde94.chunk.css": "/Movie-Star/static/css/2.27fdde94.chunk.css",
+    "static/js/2.a8f42ca2.chunk.js": "/Movie-Star/static/js/2.a8f42ca2.chunk.js",
+    "static/js/2.a8f42ca2.chunk.js.map": "/Movie-Star/static/js/2.a8f42ca2.chunk.js.map",
+    "index.html": "/Movie-Star/index.html",
+    "precache-manifest.c5ddda1654949a2a69330c0ebf6374eb.js": "/Movie-Star/precache-manifest.c5ddda1654949a2a69330c0ebf6374eb.js",
+    "service-worker.js": "/Movie-Star/service-worker.js",
+    "static/css/2.27fdde94.chunk.css.map": "/Movie-Star/static/css/2.27fdde94.chunk.css.map",
+    "static/css/main.af749b73.chunk.css.map": "/Movie-Star/static/css/main.af749b73.chunk.css.map",
+    "static/js/2.a8f42ca2.chunk.js.LICENSE": "/Movie-Star/static/js/2.a8f42ca2.chunk.js.LICENSE",
+    "static/media/no_image.jpg": "/Movie-Star/static/media/no_image.f663ef00.jpg",
+    "static/media/index.scss": "/Movie-Star/static/media/themovieorg.02a9430b.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.0c151705.js",
+    "static/js/runtime-main.34348655.js",
     "static/css/2.27fdde94.chunk.css",
     "static/js/2.a8f42ca2.chunk.js",
-    "static/css/main.29014b64.chunk.css",
+    "static/css/main.af749b73.chunk.css",
     "static/js/main.ec1fc916.chunk.js"
   ]
 }
