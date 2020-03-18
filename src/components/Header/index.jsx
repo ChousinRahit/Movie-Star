@@ -67,7 +67,9 @@ const Header = () => {
           setIsCategoriesShowing(false);
         }}
       >
-        <Link to={`/search?genre=${gen.name.toLowerCase()}`}>{gen.name}</Link>
+        <Link to={`/Movie-Star/search?genre=${gen.name.toLowerCase()}`}>
+          {gen.name}
+        </Link>
       </li>
     ));
   };
@@ -88,7 +90,9 @@ const Header = () => {
           setIsCategoriesShowing(false);
         }}
       >
-        <Link to={`/search?lang=${langCode}`}>{LanguageListObj[langCode]}</Link>
+        <Link to={`/Movie-Star/search?lang=${langCode}`}>
+          {LanguageListObj[langCode]}
+        </Link>
       </li>
     ));
   };
@@ -163,7 +167,7 @@ const Header = () => {
     e.target.children[0].blur();
     if (searchKey) {
       setIsDrawerOpen(false);
-      history.push(`/search?q=${searchKey}`);
+      history.push(`/Movie-Star/search?q=${searchKey}`);
     }
   };
 

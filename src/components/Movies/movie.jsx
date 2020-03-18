@@ -65,7 +65,7 @@ const Movie = ({ movie }) => {
             {movie?.genre_ids.map(id => (
               <li key={id}>
                 <Link
-                  to={`/search?genre=${getGenre(id).toLowerCase()}`}
+                  to={`/Movie-Star/search?genre=${getGenre(id).toLowerCase()}`}
                   className="btn btn-text"
                 >
                   {getGenre(id)}
