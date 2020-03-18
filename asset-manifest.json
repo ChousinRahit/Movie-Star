@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Movie-Star/static/css/main.af749b73.chunk.css",
-    "main.js": "/Movie-Star/static/js/main.d1c1189d.chunk.js",
-    "main.js.map": "/Movie-Star/static/js/main.d1c1189d.chunk.js.map",
+    "main.js": "/Movie-Star/static/js/main.1cd0577b.chunk.js",
+    "main.js.map": "/Movie-Star/static/js/main.1cd0577b.chunk.js.map",
     "runtime-main.js": "/Movie-Star/static/js/runtime-main.34348655.js",
     "runtime-main.js.map": "/Movie-Star/static/js/runtime-main.34348655.js.map",
     "static/css/2.27fdde94.chunk.css": "/Movie-Star/static/css/2.27fdde94.chunk.css",
     "static/js/2.6975622d.chunk.js": "/Movie-Star/static/js/2.6975622d.chunk.js",
     "static/js/2.6975622d.chunk.js.map": "/Movie-Star/static/js/2.6975622d.chunk.js.map",
     "index.html": "/Movie-Star/index.html",
-    "precache-manifest.299fe906f2149c9660fa73e4a9fb54c3.js": "/Movie-Star/precache-manifest.299fe906f2149c9660fa73e4a9fb54c3.js",
+    "precache-manifest.48960c88961bf38aff818bb50fe28999.js": "/Movie-Star/precache-manifest.48960c88961bf38aff818bb50fe28999.js",
     "service-worker.js": "/Movie-Star/service-worker.js",
     "static/css/2.27fdde94.chunk.css.map": "/Movie-Star/static/css/2.27fdde94.chunk.css.map",
     "static/css/main.af749b73.chunk.css.map": "/Movie-Star/static/css/main.af749b73.chunk.css.map",
@@ -22,6 +22,6 @@
     "static/css/2.27fdde94.chunk.css",
     "static/js/2.6975622d.chunk.js",
     "static/css/main.af749b73.chunk.css",
-    "static/js/main.d1c1189d.chunk.js"
+    "static/js/main.1cd0577b.chunk.js"
   ]
 }
