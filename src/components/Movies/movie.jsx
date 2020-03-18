@@ -25,7 +25,7 @@ const Movie = ({ movie }) => {
           src={`${IMAGE_BASE_URL}${POSTER_SIZE}${movie.poster_path}`}
         />
       </Link>*/}
-      <Link to={`/${movie.id}`}>
+      <Link to={`/Movie-Star/${movie.id}`}>
         <img
           // effect="blur"
           className="movies__movie__tumb"
