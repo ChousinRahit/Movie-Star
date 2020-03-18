@@ -14,9 +14,9 @@ const App = () => {
         <ScrollMemory />
         <Header />
         <Switch>
-          <Route path="/" exact component={Movies} />
-          <Route path="/search" exact component={SearchedResults} />
-          <Route path="/:movieId" exact component={MovieInfo} />
+          <Route path="/Movie-Star" exact component={Movies} />
+          <Route path="/Movie-Star/search" exact component={SearchedResults} />
+          <Route path="/Movie-Star/:movieId" exact component={MovieInfo} />
         </Switch>
         <Footer />
       </div>
