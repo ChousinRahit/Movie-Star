@@ -44,7 +44,18 @@ const Movie = ({ movie }) => {
 
   return (
     <div className="movies__movie">
+<<<<<<< HEAD
       <Link to={`/${movie.id}`}>
+=======
+      {/*<Link to={`/${movie.id}`}>
+        <LazyLoadImage
+          effect="blur"
+          className="movies__movie__tumb"
+          src={`${IMAGE_BASE_URL}${POSTER_SIZE}${movie.poster_path}`}
+        />
+      </Link>*/}
+      <Link to={`/Movie-Star/${movie.id}`}>
+>>>>>>> 6897315ead127b56cd06d411b4059a3cb568130c
         <img
           className={`movies__movie__tumb ${thumbheight} ${thumbheight}`}
           src={
@@ -87,7 +98,11 @@ const Movie = ({ movie }) => {
             {movie?.genre_ids.map((id) => (
               <li key={id}>
                 <Link
+<<<<<<< HEAD
                   to={`/search?genre=${getGenre(id).toLowerCase()}&page=1`}
+=======
+                  to={`/Movie-Star/search?genre=${getGenre(id).toLowerCase()}`}
+>>>>>>> 6897315ead127b56cd06d411b4059a3cb568130c
                   className="btn btn-text"
                 >
                   {getGenre(id)}

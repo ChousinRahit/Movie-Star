@@ -60,7 +60,11 @@ const Header = () => {
           setIsCategoriesShowing(false);
         }}
       >
+<<<<<<< HEAD
         <Link to={`/search?genre=${gen.name.toLowerCase()}&page=1`}>
+=======
+        <Link to={`/Movie-Star/search?genre=${gen.name.toLowerCase()}`}>
+>>>>>>> 6897315ead127b56cd06d411b4059a3cb568130c
           {gen.name}
         </Link>
       </li>
@@ -84,7 +88,11 @@ const Header = () => {
           setIsCategoriesShowing(false);
         }}
       >
+<<<<<<< HEAD
         <Link to={`/search?lang=${langCode}&page=1`}>
+=======
+        <Link to={`/Movie-Star/search?lang=${langCode}`}>
+>>>>>>> 6897315ead127b56cd06d411b4059a3cb568130c
           {LanguageListObj[langCode]}
         </Link>
       </li>
@@ -170,7 +178,11 @@ const Header = () => {
     e.target.children[0].blur();
     if (searchKey) {
       setIsDrawerOpen(false);
+<<<<<<< HEAD
       history.push(`/search?q=${searchKey}&page=1`);
+=======
+      history.push(`/Movie-Star/search?q=${searchKey}`);
+>>>>>>> 6897315ead127b56cd06d411b4059a3cb568130c
     }
   };
 

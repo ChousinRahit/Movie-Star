@@ -1,5 +1,5 @@
 {
-  "homepage": "https://chousinrahit.github.io/Movie-Star/",
+  "homepage": "http://chousinrahit.github.io/Movie-Star",
   "name": "scsss",
   "version": "0.1.0",
   "private": true,
@@ -24,6 +24,8 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0"
   },
+
+  
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -48,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^2.2.0",
     "node-sass": "^4.13.0"
   }
 }
