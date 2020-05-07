@@ -1,13 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Redirect, Link, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faFilm } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch } from 'react-redux';
-import { MobileView } from 'react-device-detect';
+// import { useDispatch } from 'react-redux';
 //-------------------------------
 
 // import logo from '../../img/logo1.png';
-import { getMoviesWithSearchKeywords, getMovies } from '../../store/actions';
 import { genres } from '../../utils/genres';
 
 //-------------------------------
@@ -19,12 +17,9 @@ const Header = () => {
   const [searchKey, setSearchKey] = useState('');
   const [queryYear, setQueryYear] = useState('');
   const [isCategoriesShowing, setIsCategoriesShowing] = useState(false);
-  const [isYearFieldInvalid, setIsYearFieldInvalid] = useState(false);
   //-------------------------------
 
   const history = useHistory();
-
-  const dispatch = useDispatch();
 
   let drawerClass = ['drawer'];
   let drawerContentClass = ['drawer-content'];
@@ -48,26 +43,26 @@ const Header = () => {
 
   //-------------------------------
 
-  const onYearSubmitClick = e => {
-    if (e.target.value.length < 4) {
-      setIsYearFieldInvalid(true);
-    }
+  const onYearSubmitClick = (e) => {
     e.preventDefault();
     if (queryYear >= 1881) {
-      history.push(`/search?year=${queryYear}`);
+      history.push(`/search?year=${queryYear}&page=1`);
       setIsDrawerOpen(false);
     }
   };
 
   const GenresList = () => {
-    return genres.map(gen => (
+    return genres.map((gen) => (
       <li
+        key={gen.name}
         onClick={() => {
           setIsDrawerOpen(false);
           setIsCategoriesShowing(false);
         }}
       >
-        <Link to={`/search?genre=${gen.name.toLowerCase()}`}>{gen.name}</Link>
+        <Link to={`/search?genre=${gen.name.toLowerCase()}&page=1`}>
+          {gen.name}
+        </Link>
       </li>
     ));
   };
@@ -78,17 +73,20 @@ const Header = () => {
     kn: 'Kannada',
     te: 'Telugu',
     cn: 'Chinese',
-    ko: 'Korean'
+    ko: 'Korean',
   };
   const LanguageList = () => {
-    return Object.keys(LanguageListObj).map(langCode => (
+    return Object.keys(LanguageListObj).map((langCode) => (
       <li
+        key={langCode}
         onClick={() => {
           setIsDrawerOpen(false);
           setIsCategoriesShowing(false);
         }}
       >
-        <Link to={`/search?lang=${langCode}`}>{LanguageListObj[langCode]}</Link>
+        <Link to={`/search?lang=${langCode}&page=1`}>
+          {LanguageListObj[langCode]}
+        </Link>
       </li>
     ));
   };
@@ -101,6 +99,13 @@ const Header = () => {
     ? 'header__nav-list-item_categories_list'
     : ['header__nav-list-item_categories_list', 'displayNone'].join(' ');
 
+  const onYearChange = (e) => {
+    if (!isNaN(Number(e.target.value))) {
+      setQueryYear(e.target.value);
+    } else {
+      setQueryYear(queryYear);
+    }
+  };
   const Links = (
     <Fragment>
       <li
@@ -117,7 +122,7 @@ const Header = () => {
         onMouseOver={() => setIsCategoriesShowing(true)}
         onMouseLeave={() => setIsCategoriesShowing(false)}
       >
-        <Link className="header__nav-list-item_categories">Categories</Link>
+        <a className="header__nav-list-item_categories">Categories</a>
         <div
           onMouseOver={() => setIsCategoriesShowing(true)}
           className={categoriesListClassName}
@@ -131,19 +136,19 @@ const Header = () => {
             <LanguageList />
           </ul>
           <div>
-            <h3>Year</h3>
+            <p>Year</p>
             <form className="year__input__form">
               <input
                 className="yearInput"
                 maxLength="4"
+                type="year"
                 placeholder="year"
                 value={queryYear}
-                onChange={e =>
-                  setQueryYear(e.target.value.match(/^\d+$/) && e.target.value)
-                }
+                onChange={onYearChange}
               />
+
               <button
-                onClick={e => onYearSubmitClick(e)}
+                onClick={(e) => onYearSubmitClick(e)}
                 className="btn btn-yearInput"
               >
                 Submit
@@ -153,17 +158,19 @@ const Header = () => {
         </div>
       </li>
       <li className={linksClassNameDependingOnScreenSize}>
-        <Link href="#footer">About</Link>
+        <a href="#footer" onClick={() => setIsDrawerOpen(false)}>
+          About
+        </a>
       </li>
     </Fragment>
   );
 
-  const onSubmitSearch = e => {
+  const onSubmitSearch = (e) => {
     e.preventDefault();
     e.target.children[0].blur();
     if (searchKey) {
       setIsDrawerOpen(false);
-      history.push(`/search?q=${searchKey}`);
+      history.push(`/search?q=${searchKey}&page=1`);
     }
   };
 
@@ -176,13 +183,13 @@ const Header = () => {
           </h1>
           <FontAwesomeIcon className="header__logo" icon={faFilm} />
         </div>
-        <form className="search" onSubmit={e => onSubmitSearch(e)}>
+        <form className="search" onSubmit={(e) => onSubmitSearch(e)}>
           <input
             type="text"
             className="search__input"
             placeholder="Search Movies"
             value={searchKey}
-            onChange={e => setSearchKey(e.target.value)}
+            onChange={(e) => setSearchKey(e.target.value)}
           />
           <button type="submit" className="search__button">
             <FontAwesomeIcon className="search__icon" icon={faSearch} />
@@ -211,13 +218,13 @@ const Header = () => {
       </section>
       <aside className={drawerClass.join(' ')}>
         <div className={drawerContentClass.join(' ')}>
-          <form className="drawer-search" onSubmit={e => onSubmitSearch(e)}>
+          <form className="drawer-search" onSubmit={(e) => onSubmitSearch(e)}>
             <input
               type="text"
               className="drawer-search__input"
               placeholder="Search Movies"
               value={searchKey}
-              onChange={e => setSearchKey(e.target.value)}
+              onChange={(e) => setSearchKey(e.target.value)}
             />
 
             <button className="drawer-search__button">

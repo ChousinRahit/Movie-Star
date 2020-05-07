@@ -1,9 +1,13 @@
-import axios from 'axios';
-import { SIMILAR_MOVIES } from './types';
+import { SIMILAR_MOVIES, MOVIE_COULD_NOT_LOAD } from './types';
 import { API_KEY, API_URL } from '../../config';
 import fetchItems from '../../utils/fetchItems';
 
-export const getSimilarMovies = movie_id => async dispatch => {
+export const getSimilarMovies = (movie_id) => async (dispatch) => {
+  if (isNaN(Number(movie_id))) {
+    return;
+  }
+  console.log('[iam in getSimilarMovies]');
+  
   const endpoint = `${API_URL}movie/${movie_id}/similar?api_key=${API_KEY}&language=en-US`;
   try {
     const { movies } = await fetchItems(endpoint);
@@ -14,9 +18,12 @@ export const getSimilarMovies = movie_id => async dispatch => {
     }
     dispatch({
       type: SIMILAR_MOVIES,
-      payload: sortedMovies
+      payload: sortedMovies,
     });
   } catch (err) {
+    dispatch({
+      type: MOVIE_COULD_NOT_LOAD,
+    });
     console.log('[simiAc]', err);
   }
 };

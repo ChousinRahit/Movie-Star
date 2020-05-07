@@ -9,8 +9,8 @@ import { useHistory } from 'react-router-dom';
 // import { LOADING } from '../../store/actions/types';
 
 const Movies = () => {
-  let { movies, loading } = useSelector(state => state.movies);
-  let { errors } = useSelector(state => state.error);
+  let { movies, loading } = useSelector((state) => state.movies);
+  let { errors } = useSelector((state) => state.error);
 
   const history = useHistory();
 
@@ -28,11 +28,26 @@ const Movies = () => {
     dispatch(loadMore('popular'));
   };
 
+  console.log(errors);
+
+  if (errors.otherError) {
+    return (
+      <div className="ErrorDiv">
+        <h1>{errors.otherError.message} :</h1>
+        <h3>Try:</h3>
+        <ul>
+          <li>Reloading</li>
+          <li>Checking your network</li>
+        </ul>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <Hero heroMovie={movies[10]} />
-      <div className="movies">
-        {movies.map(movie => (
+      <Hero heroMovie={movies[0]} />
+      <div className="movies outer-div">
+        {movies.map((movie) => (
           <Movie key={movie.id} movie={movie} />
         ))}
       </div>

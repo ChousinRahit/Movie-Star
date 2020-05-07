@@ -9,7 +9,6 @@
     @include respond(tab-port) {
       & {
         background-position: center !important;
-        overflow-x: scroll;
       }
     }
   }

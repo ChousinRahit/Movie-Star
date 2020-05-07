@@ -3,9 +3,8 @@ import {
   getMovie,
   loadMore,
   getMovies,
-  getMoviesWithSearchKeywords,
-  getTheNextPage,
-  setPageToInitial
+  getQueriedMovies,
+  clearError
 } from './movieActions';
 import { getSimilarMovies } from './similarMovieAction';
 export {
@@ -14,7 +13,6 @@ export {
   loadMore,
   getMovies,
   getSimilarMovies,
-  getMoviesWithSearchKeywords,
-  getTheNextPage,
-  setPageToInitial
+  getQueriedMovies,
+  clearError
 };

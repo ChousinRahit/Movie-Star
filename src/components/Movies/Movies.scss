@@ -69,13 +69,15 @@
 
     &__tumb {
       height: 36rem;
-      width: 25rem;
+      // width: 25rem;
       padding: 0.5rem;
       padding-bottom: 0.2rem;
       cursor: pointer;
+      object-fit: contain;
       @include respond(tab-port) {
-        height: auto;
-        width: 20rem;
+        // height: auto;
+        // width: 20rem;
+        height: 27rem;
       }
     }
 
@@ -142,9 +144,9 @@
     }
 
     &_meta {
-      position: absolute;
-      bottom: 2rem;
-      width: 18rem;
+      position: relative;
+      margin-top: auto;
+      width: 100%;
       ul {
         display: flex;
         justify-content: space-between;
@@ -279,5 +281,58 @@
   100% {
     opacity: 1;
     transform: translate(0);
+  }
+}
+
+.p-less {
+  padding-top: 0.5rem;
+}
+
+.pless-for-info {
+  padding: 1rem 0.5rem 0.5rem 1rem;
+}
+
+.s-font {
+  font-size: 1.8rem;
+  color: red;
+}
+
+.thumb-height-less {
+  height: 32rem;
+}
+
+.thumb-height-less-x2 {
+  height: 28rem;
+}
+
+.thumb-height-more {
+  height: 40rem;
+}
+
+.ErrorDiv {
+  margin: auto;
+  margin-top: 20vh;
+  margin-bottom: 40vh;
+  width: 50%;
+  color: white;
+  line-height: 3rem;
+  font-family: 'Fjalla One', sans-serif;
+  letter-spacing: 0.25rem;
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 3rem;
+    
+  }
+  h3 {
+    font-size: 2rem;
+  }
+  ul {
+    list-style: none;
+    li {
+      font-size: 1.7rem;
+    }
+  }
+  @include respond(phone) {
+    width: 80%;
   }
 }
