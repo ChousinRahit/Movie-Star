@@ -7,7 +7,7 @@ import errorsReducer from './errorsReducer';
 const rootReducer = combineReducers({
   movies: moviesReducer,
   simiMovies: similarMovies,
-  error: errorsReducer
+  error: errorsReducer,
 });
 
 export default rootReducer;

@@ -1,81 +1,82 @@
 export const genres = [
   {
     id: 28,
-    name: 'Action'
+    name: 'Action',
   },
   {
     id: 12,
-    name: 'Adventure'
+    name: 'Adventure',
   },
   {
     id: 16,
-    name: 'Animation'
+    name: 'Animation',
   },
   {
     id: 35,
-    name: 'Comedy'
+    name: 'Comedy',
   },
   {
     id: 80,
-    name: 'Crime'
+    name: 'Crime',
   },
   {
     id: 99,
-    name: 'Documentary'
+    name: 'Documentary',
   },
   {
     id: 18,
-    name: 'Drama'
+    name: 'Drama',
   },
   {
     id: 10751,
-    name: 'Family'
+    name: 'Family',
   },
   {
     id: 14,
-    name: 'Fantasy'
+    name: 'Fantasy',
   },
   {
     id: 36,
-    name: 'History'
+    name: 'History',
   },
   {
     id: 27,
-    name: 'Horror'
+    name: 'Horror',
   },
   {
     id: 10402,
-    name: 'Music'
+    name: 'Music',
   },
   {
     id: 9648,
-    name: 'Mystery'
+    name: 'Mystery',
   },
   {
     id: 10749,
-    name: 'Romance'
+    name: 'Romance',
   },
   {
     id: 878,
-    name: 'Sci-Fri'
+    name: 'Sci-Fri',
   },
   {
     id: 53,
-    name: 'Thriller'
+    name: 'Thriller',
   },
   {
     id: 10752,
-    name: 'War'
+    name: 'War',
   },
   {
     id: 37,
-    name: 'Western'
-  }
+    name: 'Western',
+  },
 ];
 
-export const getGenre = id => {
+export const getGenre = (id) => {
+  // Error handling requred
   let genreName = '';
-  genres.forEach(genre => {
+  genres.forEach((genre) => {
     if (genre.id === id) {
       genreName = genre.name;
     }
@@ -83,7 +84,10 @@ export const getGenre = id => {
   return genreName;
 };
 
-export const getGenreId = name => {
-  const obj = genres.find(obj => obj.name.toLowerCase() === name.toLowerCase());
+export const getGenreId = (name) => {
+  // Error handling requred
+  const obj = genres.find(
+    (obj) => obj.name.toLowerCase() === name.toLowerCase()
+  );
   return obj?.id;
 };

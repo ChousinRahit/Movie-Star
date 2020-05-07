@@ -15,6 +15,9 @@
 
 .loadingDiv {
   margin: 30rem;
+  @include respond(phone) {
+    margin: 30rem 0rem 30rem 0rem;
+  }
 }
 
 .credits {
@@ -46,9 +49,10 @@
     display: inline-block;
     border-radius: 85px;
     border-right: 2px solid green;
+
     border-top-right-radius: 126%;
     border-bottom-right-radius: 99%;
-    box-shadow: inset -36px 0px 50px -41px rgba(0, 255, 0, 1);
+    // box-shadow: inset -36px 0px 50px -41px rgba(0, 255, 0, 1);
     @include respond(phone) {
       padding: 1rem;
       padding-right: 2rem;
@@ -67,7 +71,10 @@
     }
 
     &::-webkit-scrollbar {
-      height: 0.5rem;
+      height: 1rem;
+      @include respond(phone) {
+        height: 0.5rem;
+      }
     }
 
     &::-webkit-scrollbar-track {
@@ -76,7 +83,7 @@
 
     &::-webkit-scrollbar-thumb {
       background-image: linear-gradient(120deg, green 0%, green 100%);
-      border-radius: 10px;
+      border-radius: 50px;
     }
   }
   &__info {
@@ -184,6 +191,7 @@
 
     @include respond(phone) {
       width: 15rem;
+      height: 25rem;
     }
   }
 }
@@ -200,4 +208,16 @@
   @include respond(phone) {
     font-size: 1.1rem;
   }
+}
+
+.placeholder-image-height {
+  height: 30rem;
+  width: 110%;
+}
+
+.errorMessage {
+  color: white;
+  text-align: center;
+  margin-top: 20vh;
+  margin-bottom: 40vh;
 }

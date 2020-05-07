@@ -1,201 +1,103 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import Movie from '../Movies/movie';
 import Loading from '../Loading';
 import { getGenreId } from '../../utils/genres';
-import {
-  getMoviesWithGenre,
-  getMoviesWithSearchKeywords
-} from '../../store/actions';
+import { getQueriedMovies, clearError } from '../../store/actions';
+import Pagination from './paginationComponent';
 
-const SearchedResults = () => {
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
+const SearchResults = () => {
   // Selecting state from redux store
-  const {
-    quriedMovies,
-    loading,
-    pageLoading,
-    lastPageReached,
-    errors
-  } = useSelector(state => state.movies);
-
+  const { quriedMovies, pageLoading, totalPages } = useSelector(
+    (state) => state.movies
+  );
+  const { errors } = useSelector((state) => state.error);
   const { nullMovies } = errors;
 
-  // console.log('aaaaaaaaaa', lastPageReached);
-
-  // instance of react-redux dispatch hook
   const dispatch = useDispatch();
-
-  // component state to hold the page data and some flags
-  const [page, setPage] = useState({
-    withQuery: 1,
-    withGenre: 1,
-    withLang: 1,
-    withYear: 1
-  });
-
-  const [queryMode, setQueryMode] = useState('');
-  const [queryItem, setQueryItem] = useState('');
 
   // router hook to know the current location
   const location = useLocation();
-  const history = useHistory();
-  // getting the query from url
-  const queryObj = location.search.split('=');
 
-  const prevQueryItemRef = useRef();
-  useEffect(() => {
-    setQueryMode(queryObj[0].substr(1));
-    console.log('-----------setting queryMode');
-    prevQueryItemRef.current = queryItem;
-    setQueryItem(queryObj[1]);
-    console.log('-----------setting queryItem');
-  });
+  const query = useQuery();
 
-  const prevQuery = prevQueryItemRef.current;
+  const getType = useCallback((q) => {
+    let type;
+    const types = ['q', 'genre', 'lang', 'year'];
+    for (let i = 0; i < types.length; i++) {
+      type = q.get(types[i]);
 
-  console.log('prevQuery', prevQuery);
+      if (type) {
+        return [types[i], type];
+      }
+    }
+    return '';
+  }, []);
 
-  // just for fun - if query is empty, showing results for 'empty' ☺
-  if (queryObj[0] === '?q' && !queryObj[1]) {
-    queryObj[1] = 'empty';
-  }
-
-  const prevQueryTerm = usePrevious(queryItem);
+  const typeInWords = getType(query)[1];
+  const type = getGenreId(typeInWords);
+  const value = getType(query)[0];
+  const tempPage = parseInt(query.get('page'));
+  const page = tempPage <= 0 ? 1 : tempPage;
 
   useEffect(() => {
-    // if (prevQueryTerm !== queryItem) {
-    //   setPage({ withQuery: 1, withGenre: 1, withLang: 1, withYear: 1 });
-    //   console.log('-----------setting Page');
-    // }
-    let reqParams = {
-      keyword: null,
-      genre: null,
-      lang: null,
-      year: null
+    if ((type || typeInWords) && page && value) {
+      const typeAndValue = [type || typeInWords, value];
+      dispatch(getQueriedMovies(typeAndValue, page));
+    }
+    return () => {
+      dispatch(clearError());
+      console.log('clearing error');
     };
+  }, [type, dispatch, typeInWords, value, page]);
 
-    switch (queryMode) {
-      case 'q':
-        // setIsWithQuery(true);
-        reqParams.keyword = queryItem;
-        // dispatch(getMoviesWithSearchKeywords(queryItem, page.withQuery));
-        break;
-      case 'genre':
-        // setIsWithQuery(false);
-        // dispatch(getMoviesWithGenre(getGenreId(queryItem), page.withGenre));
-        // console.log(queryItem);
-        reqParams.genre = getGenreId(queryItem);
-        break;
+  console.log(errors.otherError);
 
-      case 'lang':
-        reqParams.lang = queryItem;
-        break;
-      case 'year':
-        reqParams.year = queryItem;
-        break;
-
-      default:
-        break;
-    }
-
-    // option to
-    let option = 0; // 0 - for new Search keyword , 1 - for load more
-    if (prevQuery === queryObj[1]) {
-      option = 1;
-    }
-
-    dispatch(getMoviesWithSearchKeywords(reqParams, page, option));
-  }, [queryItem, page]);
-
-  // useEffect(() => {
-  //   console.log('{{{{{{{{{{{{{{{{{{{COMP DID MOUNT')
-  //   setPage({ withQuery: 1, withGenre: 1, withLang: 1, withYear: 1 });
-  // }, [queryItem]);
+  if (errors.otherError) {
+    return (
+      <div className="ErrorDiv">
+        <h1>{errors.otherError.message} :</h1>
+        <h3>Try:</h3>
+        <ul>
+          <li>Reloading</li>
+          <li>Checking your network</li>
+        </ul>
+      </div>
+    );
+  }
 
   const ShowingResultsHeading = (
     <h1 className="search__results-heading">
       <FontAwesomeIcon icon={faSearch} />
       &nbsp; &nbsp; Showing Results for{' '}
       <span>
-        {location.search.split('=')[0] === '?q'
-          ? `Keyword ${queryObj[1]}`
-          : `Genre ${queryObj[1]}`}
+        {type === 'q' ? `Keyword ${typeInWords}` : `Genre ${typeInWords}`}
       </span>
     </h1>
   );
 
-  // Load more button logic
-  const onClickLoadMore = e => {
-    e.preventDefault();
-    let pageObj = {};
+  if (pageLoading) {
+    return (
+      <div className="loadingDiv">
+        <Loading />
+      </div>
+    );
+  }
 
-    switch (queryMode) {
-      case 'q':
-        pageObj = {
-          withQuery: page.withQuery + 1,
-          withGenre: 1,
-          withLang: 1,
-          withYear: 1
-        };
-        break;
-      case 'genre':
-        pageObj = {
-          withQuery: 1,
-          withGenre: page.withGenre + 1,
-          withLang: 1,
-          withYear: 1
-        };
-        break;
-      case 'lang':
-        pageObj = {
-          withQuery: 1,
-          withGenre: 1,
-          withLang: page.withLang + 1,
-          withYear: 1
-        };
-        break;
-      case 'year':
-        pageObj = {
-          withQuery: 1,
-          withGenre: 1,
-          withLang: 1,
-          withYear: page.withYear + 1
-        };
-        break;
-      default:
-        break;
-    }
-
-    setPage(pageObj);
-    console.log('-----------setting Page');
-  };
-
-  // console.log(page);
-  // console.log(
-  // 'PAGE OBJJJJJJJJJJJnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
-  // page
-  // );
-
-  console.log('[PAGE]', page);
-  console.log('[queryItem]', queryItem);
-  console.log('[queryItem]', queryItem);
-
-  const loadingDiv = (
-    <div className="loadingDiv">
-      <Loading />
-    </div>
-  );
-
-  if (nullMovies) {
+  if (!pageLoading && nullMovies) {
     return (
       <div className="no_results">
         <h2>
           Sorry, we couldn't find any content for <span>"</span>
-          {queryObj[1]}
+          {typeInWords}
           <span>"</span>
         </h2>
 
@@ -207,41 +109,34 @@ const SearchedResults = () => {
     );
   }
 
+  //  Preparing Props to send for pagination
+  const queryParam = location.search.split('&')[0];
+  const path = `${location.pathname}${queryParam}&page=`;
+  const paginationPages = {
+    first: 1,
+    prev: page - 1 <= 0 ? 1 : page - 1,
+    var1: page,
+    var2: page + 1 >= totalPages ? 0 : page + 1,
+    var3: page + 2 >= totalPages ? 0 : page + 2,
+    next: page + 1,
+    last: totalPages,
+  };
   return (
     <div>
       <div>{ShowingResultsHeading}</div>
-      {pageLoading ? (
-        loadingDiv
-      ) : (
-        <div>
-          <div className="movies">
-            {quriedMovies.map(movie => (
+      <div>
+        {quriedMovies.length && (
+          <div className="movies outer-div">
+            {quriedMovies.map((movie) => (
               <Movie key={movie.id} movie={movie} />
             ))}
           </div>
-          {loading && <Loading />}
-          {!lastPageReached && (
-            <div className="movies__load-more">
-              <button
-                className="btn btn-white"
-                onClick={e => onClickLoadMore(e)}
-              >
-                Load More
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+        )}
+
+        <Pagination path={path} paginationPages={paginationPages} />
+      </div>
     </div>
   );
 };
 
-export default SearchedResults;
-
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
+export default SearchResults;

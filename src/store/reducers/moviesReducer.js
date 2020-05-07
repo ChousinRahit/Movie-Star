@@ -5,10 +5,7 @@ import {
   GETMOVIE,
   GETCREDITS,
   GETMOVIES_WITH_QUERY,
-  GETMOVIE_WITH_GENRE,
   PAGELOADING,
-  NULL_MOVIES,
-  LAST_PAGE_REACHED
 } from '../actions/types';
 
 const initialState = {
@@ -19,12 +16,11 @@ const initialState = {
   movie: {},
   credits: [],
   quriedMovies: [],
-  errors: { nullMovies: false, netWorkError: false },
-  lastPageReached: false
+  totalPages: 0,
 };
 
 export default function moviesReducer(state = initialState, action) {
-  const { type, payload, option } = action;
+  const { type, payload } = action;
 
   let newState = { ...state };
   switch (type) {
@@ -36,22 +32,25 @@ export default function moviesReducer(state = initialState, action) {
     case GETMOVIES:
       newState = {
         ...state,
-        movies: payload[0],
+        movies: payload[0] || [],
         loading: false,
-        page: { ...state.page, popular: payload[1] || state.page.popular }
+        page: { ...state.page, popular: payload[1] || state.page.popular },
       };
-      sessionStorage.setItem('popMovies', JSON.stringify(payload[0]));
-      sessionStorage.setItem(
-        'popPage',
-        JSON.stringify(payload[1] || state.page)
-      );
+      if (payload[0] && payload[0].length) {
+        sessionStorage.setItem('popMovies', JSON.stringify(payload[0]));
+        sessionStorage.setItem(
+          'popPage',
+          JSON.stringify(payload[1] || state.page)
+        );
+      }
       return newState;
+
     case LOADMORE:
       newState = {
         ...state,
         movies: state.movies.concat(payload[0]),
         loading: false,
-        page: { ...state.page, popular: payload[1] || state.page.popular }
+        page: { ...state.page, popular: payload[1] || state.page.popular },
       };
       sessionStorage.setItem(
         'popMovies',
@@ -70,52 +69,19 @@ export default function moviesReducer(state = initialState, action) {
     case GETCREDITS:
       newState = {
         ...state,
-        credits: payload.cast
+        credits: payload.cast,
       };
       return newState;
 
     case GETMOVIES_WITH_QUERY:
-      const with_query = option
-        ? [...state.quriedMovies, ...payload[0]]
-        : payload[0];
-
-      // console.log(option);
       newState = {
         ...state,
-        quriedMovies: with_query,
+        quriedMovies: payload[0] || [],
+        totalPages: payload[1],
         loading: false,
         pageLoading: false,
-        lastPageReached: false,
-        errors: { ...state.errors, nullMovies: !payload[0].length }
-      };
-      return newState;
-
-    case GETMOVIE_WITH_GENRE:
-      const with_genre = option
-        ? [...state.quriedMovies, ...payload[0]]
-        : payload[0];
-
-      newState = {
-        ...state,
-        quriedMovies: with_genre,
-        loading: false,
-        pageLoading: false,
-        lastPageReached: false
       };
 
-      return newState;
-    case NULL_MOVIES:
-      newState = {
-        ...state,
-        errors: { ...state.errors, nullMovies: true }
-      };
-      return newState;
-
-    case LAST_PAGE_REACHED:
-      newState = {
-        ...state,
-        lastPageReached: true
-      };
       return newState;
 
     default:

@@ -33,8 +33,21 @@
     font-family: 'Pacifico', cursive;
   }
   &__contact {
+    a {
+      text-decoration: none;
+      color: black;
+    }
     @include respond(phone) {
       margin: 3rem auto 4rem auto;
+    }
+
+    &-soci {
+      a {
+        text-decoration: none;
+        color: black;
+        font-size: 2rem;
+        margin-right: 20px;
+      }
     }
     & ul {
       list-style: none;

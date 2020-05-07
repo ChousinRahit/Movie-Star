@@ -3,8 +3,8 @@ import {
   getMovie,
   loadMore,
   getMovies,
-  getMoviesWithSearchKeywords,
-  getMoviesWithGenre
+  getQueriedMovies,
+  clearError
 } from './movieActions';
 import { getSimilarMovies } from './similarMovieAction';
 export {
@@ -13,6 +13,6 @@ export {
   loadMore,
   getMovies,
   getSimilarMovies,
-  getMoviesWithSearchKeywords,
-  getMoviesWithGenre
+  getQueriedMovies,
+  clearError
 };

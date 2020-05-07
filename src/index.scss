@@ -1,7 +1,6 @@
 @import './scss/_mixins';
 @import './components/Header/header.scss';
 @import './components/Hero/hero.scss';
-@import './components/Movies/movie.scss';
 @import './components/Movies/Movies.scss';
 @import './components/Footer/footer.scss';
 @import './components/Loading/loading.scss';
@@ -90,5 +89,14 @@ body {
   &::-webkit-scrollbar-thumb {
     background-image: linear-gradient(120deg, white 0%, white 100%);
     border-radius: 10px;
+  }
+}
+
+.outer-div {
+  @include respond(big-desktop) {
+    & {
+      width: 90%;
+      margin: auto;
+    }
   }
 }

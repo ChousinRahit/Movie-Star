@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './app';
+import App from './App';
 
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -17,7 +17,9 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
   </Provider>,
   document.getElementById('root')
 );
